@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>클림트 키스 스탑워치</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Cinzel:wght@500;600&display=swap');
+
+  :root {
+    --gold: #d4af37;
+    --gold-light: #f2d478;
+    --gold-deep: #9c7a24;
+    --black: #14100c;
+    --maroon: #7a2048;
+    --teal: #1a5c56;
+    --cream: #f1e6c9;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--black);
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--cream);
+  }
+
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* ---- Klimt "The Kiss" photo background ---- */
+  .bg-photo {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background-image: url('klimt-kiss.png');
+    background-size: cover;
+    background-position: center;
+    filter: saturate(1.05) contrast(1.02);
+  }
+  .bg-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(circle at 50% 45%, rgba(10,7,4,0.35) 0%, rgba(10,7,4,0.72) 62%, rgba(6,4,2,0.88) 100%);
+  }
+
+  .frame {
+    position: relative;
+    z-index: 1;
+    width: 460px;
+    max-width: 92vw;
+    padding: 46px 38px 36px;
+    background:
+      linear-gradient(155deg, rgba(28,21,14,0.88) 0%, rgba(16,12,8,0.90) 55%, rgba(26,19,12,0.88) 100%);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 18px;
+    box-shadow:
+      0 0 0 1px rgba(212,175,55,0.35),
+      0 0 0 9px rgba(20,16,12,0.75),
+      0 0 0 10px rgba(212,175,55,0.55),
+      0 25px 70px rgba(0,0,0,0.65);
+  }
+
+  /* ornamental border pattern strip */
+  .border-strip {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    height: 14px;
+    display: flex;
+    justify-content: space-between;
+    opacity: 0.85;
+  }
+  .border-strip.top { top: 14px; }
+  .border-strip.bottom { bottom: 14px; }
+  .border-strip span {
+    width: 8px;
+    height: 8px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    opacity: 0.75;
+  }
+  .border-strip span:nth-child(3n+2) { background: var(--maroon); }
+  .border-strip span:nth-child(4n+1) { background: var(--teal); }
+
+  h1 {
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 6px;
+    color: var(--gold-light);
+    margin: 6px 0 28px;
+    text-transform: uppercase;
+  }
+  h1::before, h1::after {
+    content: "❖";
+    color: var(--gold-deep);
+    font-size: 11px;
+    margin: 0 12px;
+    vertical-align: middle;
+  }
+
+  /* ---- circular medallion dial ---- */
+  .dial-wrap {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto 30px;
+  }
+
+  .dial-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+      conic-gradient(from 0deg,
+        var(--gold) 0deg, var(--gold-light) 30deg, var(--gold) 60deg,
+        var(--gold-deep) 90deg, var(--gold) 120deg, var(--gold-light) 150deg,
+        var(--gold) 180deg, var(--gold-deep) 210deg, var(--gold) 240deg,
+        var(--gold-light) 270deg, var(--gold) 300deg, var(--gold-deep) 330deg, var(--gold) 360deg);
+    box-shadow: inset 0 0 0 3px rgba(20,16,12,0.5), 0 0 24px rgba(212,175,55,0.35);
+  }
+
+  .dial-ring::after {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    border-radius: 50%;
+    background: var(--black);
+  }
+
+  .dial-inner {
+    position: absolute;
+    inset: 18px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 35% 30%, #241a10 0%, #14100c 70%);
+    border: 2px solid rgba(212,175,55,0.55);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tick {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold-light);
+    box-shadow: 0 0 5px rgba(242,212,120,0.8);
+  }
+
+  .display {
+    font-family: 'Cinzel', serif;
+    font-variant-numeric: tabular-nums;
+    font-size: 34px;
+    font-weight: 600;
+    color: var(--gold-light);
+    text-shadow: 0 0 12px rgba(212,175,55,0.5);
+    letter-spacing: 1px;
+  }
+  .display .ms {
+    font-size: 17px;
+    color: var(--gold-deep);
+    margin-left: 2px;
+  }
+
+  .subtitle {
+    margin-top: 8px;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: rgba(241,230,201,0.5);
+    text-transform: uppercase;
+  }
+
+  .controls {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 26px;
+  }
+
+  button {
+    position: relative;
+    border: 1px solid rgba(212,175,55,0.55);
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--gold-light);
+    background: linear-gradient(160deg, #241a10 0%, #14100c 100%);
+    transition: transform 0.08s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    min-width: 88px;
+  }
+  button:hover { box-shadow: 0 0 14px rgba(212,175,55,0.35); }
+  button:active { transform: scale(0.96); }
+  button:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
+
+  #startBtn { background: linear-gradient(160deg, var(--gold-light) 0%, var(--gold-deep) 100%); color: #1a1206; border-color: var(--gold); }
+  #resetBtn { border-color: rgba(122,32,72,0.7); color: #e8b8cc; }
+  #resetBtn:hover { box-shadow: 0 0 14px rgba(122,32,72,0.45); }
+
+  .laps {
+    max-height: 190px;
+    overflow-y: auto;
+    padding-top: 14px;
+    border-top: 1px solid rgba(212,175,55,0.3);
+  }
+  .laps::-webkit-scrollbar { width: 6px; }
+  .laps::-webkit-scrollbar-thumb { background: var(--gold-deep); border-radius: 3px; }
+
+  .lap-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 6px;
+    font-size: 15px;
+    color: rgba(241,230,201,0.65);
+    border-bottom: 1px solid rgba(212,175,55,0.12);
+  }
+  .lap-item::before {
+    content: "◆";
+    font-size: 8px;
+    color: var(--gold-deep);
+    margin-right: 8px;
+  }
+  .lap-item span:first-child { color: var(--cream); font-weight: 600; }
+  .lap-item.fastest { color: #6fd6a8; }
+  .lap-item.fastest::before { color: #6fd6a8; }
+  .lap-item.slowest { color: #d68a9c; }
+  .lap-item.slowest::before { color: #d68a9c; }
+
+  .empty {
+    text-align: center;
+    font-size: 13px;
+    color: rgba(241,230,201,0.4);
+    padding: 10px 0;
+    font-style: italic;
+  }
+
+  .credit {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: rgba(241,230,201,0.35);
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-photo"></div>
+<div class="bg-overlay"></div>
+
+<div class="frame">
+  <div class="border-strip top" id="stripTop"></div>
+
+  <h1>Gilded Stopwatch</h1>
+
+  <div class="dial-wrap">
+    <div class="dial-ring"></div>
+    <div class="dial-inner">
+      <div class="display"><span id="time">00:00:00</span><span class="ms" id="ms">.00</span></div>
+      <div class="subtitle" id="statusText">준비됨</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="startBtn">시작</button>
+    <button id="lapBtn" disabled>랩</button>
+    <button id="resetBtn">리셋</button>
+  </div>
+
+  <div class="laps" id="laps">
+    <div class="empty" id="emptyMsg">기록된 랩이 없습니다</div>
+  </div>
+
+  <div class="border-strip bottom" id="stripBottom"></div>
+  <div class="credit">Background — Gustav Klimt, "The Kiss" (1907–08)</div>
+</div>
+
+<script>
+  const timeEl = document.getElementById('time');
+  const msEl = document.getElementById('ms');
+  const statusText = document.getElementById('statusText');
+  const startBtn = document.getElementById('startBtn');
+  const lapBtn = document.getElementById('lapBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const lapsEl = document.getElementById('laps');
+  const emptyMsg = document.getElementById('emptyMsg');
+  const dialWrap = document.querySelector('.dial-wrap');
+
+  for (let i = 0; i < 24; i++) {
+    const angle = (i / 24) * 2 * Math.PI;
+    const r = 141;
+    const x = 150 + r * Math.cos(angle) - 3;
+    const y = 150 + r * Math.sin(angle) - 3;
+    const tick = document.createElement('div');
+    tick.className = 'tick';
+    tick.style.left = x + 'px';
+    tick.style.top = y + 'px';
+    tick.style.opacity = i % 3 === 0 ? '0.9' : '0.35';
+    dialWrap.appendChild(tick);
+  }
+
+  function fillStrip(el, count) {
+    for (let i = 0; i < count; i++) {
+      const s = document.createElement('span');
+      el.appendChild(s);
+    }
+  }
+  fillStrip(document.getElementById('stripTop'), 26);
+  fillStrip(document.getElementById('stripBottom'), 26);
+
+  let running = false;
+  let startTime = 0;
+  let elapsed = 0;
+  let rafId = null;
+  let laps = [];
+
+  function format(ms) {
+    const totalMs = Math.floor(ms);
+    const hours = Math.floor(totalMs / 3600000);
+    const minutes = Math.floor((totalMs % 3600000) / 60000);
+    const seconds = Math.floor((totalMs % 60000) / 1000);
+    const centis = Math.floor((totalMs % 1000) / 10);
+    const pad = (n, l = 2) => String(n).padStart(l, '0');
+    return {
+      main: `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`,
+      ms: `.${pad(centis)}`
+    };
+  }
+
+  function render() {
+    const now = running ? elapsed + (performance.now() - startTime) : elapsed;
+    const { main, ms } = format(now);
+    timeEl.textContent = main;
+    msEl.textContent = ms;
+    if (running) rafId = requestAnimationFrame(render);
+  }
+
+  function start() {
+    running = true;
+    startTime = performance.now();
+    startBtn.textContent = '정지';
+    statusText.textContent = '진행 중';
+    lapBtn.disabled = false;
+    render();
+  }
+
+  function stop() {
+    running = false;
+    elapsed += performance.now() - startTime;
+    cancelAnimationFrame(rafId);
+    startBtn.textContent = '시작';
+    statusText.textContent = '일시정지';
+    lapBtn.disabled = true;
+  }
+
+  function reset() {
+    running = false;
+    cancelAnimationFrame(rafId);
+    elapsed = 0;
+    laps = [];
+    startBtn.textContent = '시작';
+    statusText.textContent = '준비됨';
+    lapBtn.disabled = true;
+    timeEl.textContent = '00:00:00';
+    msEl.textContent = '.00';
+    renderLaps();
+  }
+
+  function addLap() {
+    const now = elapsed + (performance.now() - startTime);
+    const prev = laps.length ? laps[laps.length - 1].total : 0;
+    laps.push({ total: now, split: now - prev });
+    renderLaps();
+  }
+
+  function renderLaps() {
+    lapsEl.innerHTML = '';
+    if (laps.length === 0) {
+      lapsEl.appendChild(emptyMsg);
+      return;
+    }
+    const splits = laps.map(l => l.split);
+    const fastest = Math.min(...splits);
+    const slowest = Math.max(...splits);
+
+    laps.slice().reverse().forEach((lap, idx) => {
+      const lapNumber = laps.length - idx;
+      const item = document.createElement('div');
+      item.className = 'lap-item';
+      if (laps.length > 1) {
+        if (lap.split === fastest) item.classList.add('fastest');
+        else if (lap.split === slowest) item.classList.add('slowest');
+      }
+      const splitFmt = format(lap.split);
+      const totalFmt = format(lap.total);
+      item.innerHTML = `<span>랩 ${lapNumber} · ${splitFmt.main}${splitFmt.ms}</span><span>${totalFmt.main}${totalFmt.ms}</span>`;
+      lapsEl.appendChild(item);
+    });
+  }
+
+  startBtn.addEventListener('click', () => running ? stop() : start());
+  lapBtn.addEventListener('click', addLap);
+  resetBtn.addEventListener('click', reset);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') { e.preventDefault(); running ? stop() : start(); }
+    if (e.code === 'KeyL' && !lapBtn.disabled) addLap();
+    if (e.code === 'KeyR') reset();
+  });
+</script>
+</body>
+</html>
