@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>스탑워치 모음</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Cinzel:wght@500;600&display=swap');
+
+  :root {
+    --gold: #d4af37;
+    --gold-light: #f2d478;
+    --gold-deep: #9c7a24;
+    --black: #14100c;
+    --maroon: #7a2048;
+    --teal: #1a5c56;
+    --cream: #f1e6c9;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(212,175,55,0.10) 0%, transparent 40%),
+      radial-gradient(circle at 85% 85%, rgba(122,32,72,0.16) 0%, transparent 45%),
+      var(--black);
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--cream);
+  }
+
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+  }
+
+  .wrap {
+    width: 520px;
+    max-width: 94vw;
+  }
+
+  h1 {
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 6px;
+    color: var(--gold-light);
+    margin: 0 0 8px;
+    text-transform: uppercase;
+  }
+  h1::before, h1::after { content: "❖"; color: var(--gold-deep); font-size: 12px; margin: 0 14px; vertical-align: middle; }
+
+  .sub {
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: rgba(241,230,201,0.5);
+    margin-bottom: 34px;
+  }
+
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  a.card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    text-decoration: none;
+    color: inherit;
+    padding: 18px 22px;
+    border-radius: 14px;
+    border: 1px solid rgba(212,175,55,0.4);
+    background: linear-gradient(155deg, #1c150e 0%, #100c08 60%, #1a130c 100%);
+    transition: transform 0.12s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  a.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(212,175,55,0.6);
+    border-color: var(--gold);
+  }
+
+  .swatch {
+    flex: 0 0 46px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 2px solid rgba(212,175,55,0.6);
+  }
+  .swatch.plain { background: radial-gradient(circle at 35% 30%, #2a2a2a 0%, #111 70%); }
+  .swatch.tree { background: conic-gradient(from 0deg, var(--gold), var(--gold-light), var(--gold-deep), var(--gold)); }
+  .swatch.kiss { background-image: url('klimt-kiss.png'); background-size: 220%; background-position: 55% 30%; }
+
+  .card-text { flex: 1; }
+  .card-title {
+    font-family: 'Cinzel', serif;
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    color: var(--gold-light);
+    margin-bottom: 4px;
+  }
+  .card-desc {
+    font-size: 14px;
+    color: rgba(241,230,201,0.6);
+  }
+
+  .arrow { font-size: 20px; color: var(--gold-deep); }
+
+  footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: rgba(241,230,201,0.3);
+  }
+  footer a { color: rgba(212,175,55,0.7); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Stopwatch Gallery</h1>
+    <div class="sub">원하는 버전을 선택하세요</div>
+
+    <div class="cards">
+      <a class="card" href="stopwatch-klimt-kiss.html">
+        <div class="swatch kiss"></div>
+        <div class="card-text">
+          <div class="card-title">GILDED — THE KISS</div>
+          <div class="card-desc">클림트 "키스" 그림이 배경과 다이얼에 담긴 버전</div>
+        </div>
+        <div class="arrow">›</div>
+      </a>
+
+      <a class="card" href="stopwatch-klimt.html">
+        <div class="swatch tree"></div>
+        <div class="card-text">
+          <div class="card-title">GILDED — TREE OF LIFE</div>
+          <div class="card-desc">클림트 화풍의 오리지널 황금 넝쿨 SVG 배경</div>
+        </div>
+        <div class="arrow">›</div>
+      </a>
+
+      <a class="card" href="stopwatch.html">
+        <div class="swatch plain"></div>
+        <div class="card-text">
+          <div class="card-title">SIMPLE</div>
+          <div class="card-desc">기본 다크 테마 스탑워치</div>
+        </div>
+        <div class="arrow">›</div>
+      </a>
+    </div>
+
+    <footer>github.com/jwjoung-JJ/Stopwatch</footer>
+  </div>
+</body>
+</html>
